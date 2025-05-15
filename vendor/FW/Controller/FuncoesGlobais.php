@@ -17,7 +17,7 @@ class FuncoesGlobais{
 
     function criptografar($senha) {
         // Criptografa a senha usando o algoritmo MD5
-        return hash('md5', $senha);
+        return hash('sha1', $senha);
     }
 
     function converterData($data) {
