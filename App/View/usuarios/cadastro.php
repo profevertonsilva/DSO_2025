@@ -1,4 +1,4 @@
-<form action="/cadastrar" method="POST">
+<form action="/dashboard/usuarios/cadastrar" method="POST">
 <label>Nome</label>
 <input type="text" id="nome" name="nome" required>
 <label>Email</label>

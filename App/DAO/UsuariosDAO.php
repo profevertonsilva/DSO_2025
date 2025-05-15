@@ -44,8 +44,60 @@ class UsuariosDAO extends DAO{
             die();
         }
     }
-    public function excluir($obj){}
-    public function alterar($obj){}
+    public function excluir($obj){
+        try{
+            $id = $obj;
+            $sql = "
+                UPDATE usuarios SET 
+                    status = 'I'
+                WHERE id = :id
+            ";
+            $stmt = $this->getConn()->prepare($sql);
+            $stmt->bindParam(":id", $id);
+            if($stmt->execute()){
+                return true;
+            } else{
+                return false;
+            }
+
+        }catch(\PDOException $ex){
+            header('Location: '.$_ENV['BASE_URL'].'error404');
+            die();
+        }
+    }
+    public function alterar($obj){
+        try{
+            $global = new FuncoesGlobais();
+            $id = $obj->__get('id');
+            $nome = $obj->__get('nome');
+            $email = $obj->__get('email');
+            $senha = $global->criptografar($obj->__get('senha'));
+            $status = $obj->__get('status');
+            $sql = "
+                UPDATE usuarios SET
+                    nome = :nome,
+                    email = :email,
+                    senha = :senha,
+                    status = :status
+                WHERE id = :id
+            ";
+            $stmt = $this->getConn()->prepare($sql);
+            $stmt->bindParam(":nome", $nome);
+            $stmt->bindParam(":email", $email);
+            $stmt->bindParam(":senha", $senha);
+            $stmt->bindParam(":status", $status);
+            $stmt->bindParam(":id", $id);
+            if($stmt->execute()){
+                return true;
+            } else{
+                return false;
+            }
+
+        }catch(\PDOException $ex){
+            header('Location: '.$_ENV['BASE_URL'].'error404');
+            die();
+        }
+    }
     public function buscarPorId($obj){
         $sql = "
             SELECT 

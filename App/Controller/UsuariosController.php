@@ -46,6 +46,9 @@ class UsuariosController extends Action{
         $status = $_POST["status"];
 
 
+        /* print_r($nome." - ".$email." - ".$senha." - ".$status);
+        exit; */
+
         $usuariosModel = new UsuariosModel();
         $usuariosModel->__set('nome',$nome);
         $usuariosModel->__set('email',$email);
@@ -57,7 +60,7 @@ class UsuariosController extends Action{
 
         $usuariosDAO = new UsuariosDAO();
         $usuariosDAO->inserir($usuariosModel);
-        header('Location: /cadastro?success=1');
+        header('Location: /dashboard/usuarios?success=1');
         
 
 
@@ -81,8 +84,43 @@ class UsuariosController extends Action{
     public function editar(){
 
         $id = $this->getParams()[0];
-        print_r($id);
-        exit;
+
+
+        $usuariosDAO = new UsuariosDAO();
+        $usuarios = $usuariosDAO->buscarPorId($id);
+        $this->getView()->usuarios = $usuarios;
+
+        
+        $this->render('editar', '');
+
+
+    }
+
+
+    public function alterar(){
+        $id = $_POST["id"];
+        $nome = $_POST["nome"];
+        $email = $_POST["email"];
+        $senha = $_POST["senha"];
+        $status = $_POST["status"];
+
+        $usuariosModel = new UsuariosModel();
+        $usuariosModel->__set('id',$id);
+        $usuariosModel->__set('nome',$nome);
+        $usuariosModel->__set('email',$email);
+        $usuariosModel->__set('senha',$senha);
+        $usuariosModel->__set('status',$status);
+        $usuariosDAO = new UsuariosDAO();
+        $usuariosDAO->alterar($usuariosModel);
+        header('Location: /dashboard/usuarios?success=1');
+    }
+
+    public function excluir(){
+        $id = $this->getParams()[0];
+        
+        $usuariosDAO = new UsuariosDAO();
+        $usuariosDAO->excluir($id);
+        header('Location: /dashboard/usuarios?success=1');
     }
     
     
